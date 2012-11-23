@@ -29,6 +29,15 @@ class Sm : public Kobject, public Queue<Ec>
 
         static Slab_cache cache;
 
+        static void free (Rcu_elem * a) {
+            Sm * sm = static_cast <Sm *>(a);
+
+            while(!sm->counter)
+                sm->up(true);
+
+            delete sm;
+        }
+
     public:
         Sm (Pd *, mword, mword = 0);
 
@@ -44,6 +53,8 @@ class Sm : public Kobject, public Queue<Ec>
                     return;
                 }
 
+                e->add_ref();
+
                 enqueue (e);
             }
 
@@ -51,7 +62,7 @@ class Sm : public Kobject, public Queue<Ec>
         }
 
         ALWAYS_INLINE
-        inline void up()
+        inline void up(bool abort = false)
         {
             Ec *e;
 
@@ -61,9 +72,11 @@ class Sm : public Kobject, public Queue<Ec>
                     counter++;
                     return;
                 }
+
+                e->del_ref();
             }
 
-            e->release();
+            e->release(abort);
         }
 
         ALWAYS_INLINE

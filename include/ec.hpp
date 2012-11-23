@@ -201,8 +201,11 @@ class Ec : public Kobject, public Refcount, public Queue<Sc>
         }
 
         ALWAYS_INLINE
-        inline void release()
+        inline void release(bool abort = false)
         {
+            if (abort)
+                cont = sys_finish<Sys_regs::BAD_CAP>;
+
             Lock_guard <Spinlock> guard (lock);
 
             for (Sc *s; (s = dequeue()); ) {
