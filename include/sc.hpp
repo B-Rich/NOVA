@@ -24,7 +24,7 @@
 
 class Ec;
 
-class Sc : public Kobject
+class Sc : public Kobject, public Refcount
 {
     friend class Queue<Sc>;
 
@@ -55,6 +55,15 @@ class Sc : public Kobject
 
         void ready_enqueue (uint64);
         void ready_dequeue (uint64);
+
+        static void free (Rcu_elem * a) {
+            Sc * s = static_cast<Sc *>(a);
+              
+            if (s->del_ref()) {
+                assert(Sc::current != s);
+                delete s;
+            }
+        }
 
     public:
         static Sc *     current     CPULOCAL_HOT;
