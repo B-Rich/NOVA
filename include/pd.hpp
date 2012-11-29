@@ -36,6 +36,15 @@ class Pd : public Kobject, public Refcount, public Space_mem, public Space_pio, 
         WARN_UNUSED_RESULT
         mword clamp (mword &, mword &, mword, mword, mword);
 
+        static void free (Rcu_elem * a) {
+            Pd * pd = static_cast <Pd *>(a);
+
+            if (pd->del_ref()) {
+                assert (pd != Pd::current);
+                delete pd;
+            }
+        }
+
     public:
         static Pd *current CPULOCAL_HOT;
         static Pd kern, root;
@@ -43,7 +52,7 @@ class Pd : public Kobject, public Refcount, public Space_mem, public Space_pio, 
         INIT
         Pd (Pd *);
 
-        Pd (Pd *own, mword sel, mword a) : Kobject (PD, static_cast<Space_obj *>(own), sel, a) {}
+        Pd (Pd *own, mword sel, mword a) : Kobject (PD, static_cast<Space_obj *>(own), sel, a, free) {}
 
         ALWAYS_INLINE HOT
         inline void make_current()
@@ -61,9 +70,15 @@ class Pd : public Kobject, public Refcount, public Space_mem, public Space_pio, 
                 pcid |= static_cast<mword>(1ULL << 63);
             }
 
+            if (current->del_ref())
+                delete current;
+
             current = this;
 
+            current->add_ref();
+
             loc[Cpu::id].make_current (Cpu::feature (Cpu::FEAT_PCID) ? pcid : 0);
+
         }
 
         ALWAYS_INLINE
