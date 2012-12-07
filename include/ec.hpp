@@ -265,7 +265,7 @@ class Ec : public Kobject, public Refcount, public Queue<Sc>
             Lock_guard <Spinlock> guard (lock);
 
             for (Sc *s; (s = dequeue()); ) {
-                if (EXPECT_FALSE(s->del_ref())) {
+                if (EXPECT_FALSE(s->del_ref()) && (this == s->ec)) {
                     delete s;
                     continue;
                 }

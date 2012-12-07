@@ -114,7 +114,7 @@ void Sc::schedule (bool suspend)
 
     Cpu::hazard &= ~HZD_SCHED;
 
-    if (EXPECT_FALSE(current->del_ref()))
+    if (EXPECT_FALSE(current->del_ref()) && (Ec::current == current->ec))
         delete current;
     else
     if (EXPECT_TRUE (!suspend))
@@ -170,10 +170,8 @@ void Sc::rrq_handler()
 
         ptr = ptr->next == ptr ? nullptr : ptr->next;
 
-        if (EXPECT_FALSE(sc->del_ref()))
-            delete sc;
-        else
-            sc->ready_enqueue (t);
+        sc->del_ref();
+        sc->ready_enqueue (t);
     }
 
     rq.queue = nullptr;
