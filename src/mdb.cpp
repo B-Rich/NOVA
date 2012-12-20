@@ -21,7 +21,7 @@
 #include "mdb.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Mdb::cache (sizeof (Mdb), 16);
+Slab_cache Mdb::cache ("Mdb", sizeof (Mdb), 16);
 
 Spinlock Mdb::lock;
 

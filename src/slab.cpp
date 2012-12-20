@@ -57,9 +57,10 @@ void Slab::free (void *ptr)
     head = link;
 }
 
-Slab_cache::Slab_cache (unsigned long elem_size, unsigned elem_align)
+Slab_cache::Slab_cache (const char *aname, unsigned long elem_size, unsigned elem_align)
           : curr (nullptr),
             head (nullptr),
+            name (aname),
             size (align_up (elem_size, sizeof (mword))),
             buff (align_up (size + sizeof (mword), elem_align)),
             elem ((PAGE_SIZE - sizeof (Slab)) / buff)
@@ -68,6 +69,8 @@ Slab_cache::Slab_cache (unsigned long elem_size, unsigned elem_align)
            this,
            elem_size,
            elem_align);
+    next = first;
+    first = this;
 }
 
 void Slab_cache::grow()
@@ -158,3 +161,21 @@ void Slab_cache::free (void *ptr)
         }
     }
 }
+
+void Slab_cache::print_stats()
+{
+        mword slabs = 0, objs = 0;
+        for (Slab *s = head; s; s = s->next) {
+                slabs++;
+                objs += elem - s->avail;
+        }
+        Console::print("%6s: %5lu objs of %3lu B in %3lu slabs (%3lu KiB)", name, objs, buff, slabs, slabs*sizeof(slabs) /*buff*objs/1024*/);
+}
+
+void Slab_cache::print_all_stats()
+{
+        for (Slab_cache *c = first; c; c = c->next)
+                c->print_stats();
+}
+
+Slab_cache *Slab_cache::first = nullptr;

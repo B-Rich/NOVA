@@ -22,7 +22,7 @@
 #include "stdio.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Sm::cache (sizeof (Sm), 32);
+Slab_cache Sm::cache ("Sm", sizeof (Sm), 32);
 
 Sm::Sm (Pd *own, mword sel, mword cnt) : Kobject (SM, static_cast<Space_obj *>(own), sel, 0x3, free), counter (cnt)
 {

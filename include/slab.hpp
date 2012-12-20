@@ -32,6 +32,10 @@ class Slab_cache
         Slab *      curr;
         Slab *      head;
 
+        const char* const name;
+        Slab_cache *next;
+        static Slab_cache *first;
+
         /*
          * Back end allocator
          */
@@ -42,7 +46,7 @@ class Slab_cache
         unsigned long buff; // Size of an element buffer (includes link field)
         unsigned long elem; // Number of elements
 
-        Slab_cache (unsigned long elem_size, unsigned elem_align);
+        Slab_cache (const char *name, unsigned long elem_size, unsigned elem_align);
 
         /*
          * Front end allocator
@@ -53,6 +57,9 @@ class Slab_cache
          * Front end deallocator
          */
         void free (void *ptr);
+
+        void print_stats();
+        static void print_all_stats();
 };
 
 class Slab

@@ -23,7 +23,7 @@
 #include "stdio.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Pt::cache (sizeof (Pt), 32);
+Slab_cache Pt::cache ("Pt", sizeof (Pt), 32);
 
 Pt::Pt (Pd *own, mword sel, Ec *e, Mtd m, mword addr) : Kobject (PT, static_cast<Space_obj *>(own), sel, 0x3, free), ec (e), mtd (m), ip (addr), id(0)
 {

@@ -559,3 +559,5 @@ bool Utcb::save_svm (Cpu_regs *regs)
 
     return mtd & Mtd::FPU;
 }
+
+int Utcb::allocated = 0;

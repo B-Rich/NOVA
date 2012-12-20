@@ -23,7 +23,7 @@
 #include "stdio.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Ioapic::cache (sizeof (Ioapic), 8);
+Slab_cache Ioapic::cache ("Ioapic", sizeof (Ioapic), 8);
 
 Ioapic *Ioapic::list;
 

@@ -23,7 +23,7 @@
 #include "stdio.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Pci::cache (sizeof (Pci), 8);
+Slab_cache Pci::cache ("Pci", sizeof (Pci), 8);
 
 unsigned    Pci::bus_base;
 Paddr       Pci::cfg_base;

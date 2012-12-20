@@ -26,7 +26,7 @@ unsigned Mtrr::dtype;
 Mtrr *   Mtrr::list;
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Mtrr::cache (sizeof (Mtrr), 8);
+Slab_cache Mtrr::cache ("Mtrr", sizeof (Mtrr), 8);
 
 void Mtrr::init()
 {

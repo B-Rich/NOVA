@@ -19,4 +19,4 @@
 #include "fpu.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Fpu::cache (sizeof (Fpu), 16);
+Slab_cache Fpu::cache ("Fpu", sizeof (Fpu), 16);

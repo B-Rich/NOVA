@@ -26,7 +26,7 @@
 #include "vectors.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache  Dmar::cache (sizeof (Dmar), 8);
+Slab_cache  Dmar::cache ("Dmar", sizeof (Dmar), 8);
 
 Dmar *      Dmar::list;
 Dmar_ctx *  Dmar::ctx = new Dmar_ctx;

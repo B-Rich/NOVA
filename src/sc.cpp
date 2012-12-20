@@ -24,7 +24,7 @@
 #include "vectors.hpp"
 
 INIT_PRIORITY (PRIO_SLAB)
-Slab_cache Sc::cache (sizeof (Sc), 32);
+Slab_cache Sc::cache ("Sc", sizeof (Sc), 32);
 
 INIT_PRIORITY (PRIO_LOCAL)
 Sc::Rq Sc::rq;
