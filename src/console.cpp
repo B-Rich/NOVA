@@ -23,6 +23,10 @@
 #include "lock_guard.hpp"
 #include "x86.hpp"
 
+#include "slab.hpp"
+#include "utcb.hpp"
+#include "pte.hpp"
+
 Console *Console::list;
 Spinlock Console::lock;
 
@@ -195,6 +199,11 @@ void Console::panic (char const *format, ...)
             va_end (args);
         }
     }
+
+    print("\nSlab_cache statistics:\n");
+    Slab_cache::print_all_stats();
+    print("Allocated UTCBs: %d KiB\n", Utcb::allocated*4);
+    print("Allocated pagetables: %d KiB\n", Pte_allocated*4);
 
     shutdown();
 }
