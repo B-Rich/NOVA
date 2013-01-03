@@ -263,3 +263,15 @@ void Pd::xfer_items (Pd *src, Crd xlt, Crd del, Xfer *s, Xfer *d, unsigned long 
             *d-- = Xfer (crd, s->flags());
     }
 }
+
+Pd::~Pd()
+{
+    Space_mem::hpt.clear();
+    Space_mem::dpt.clear();
+    Space_mem::npt.clear();
+    for (unsigned i = 0; i < NUM_CPU; i++)
+        Space_mem::loc[i].clear(false);
+}
+
+extern "C" int __cxa_atexit(void (*)(void *), void *, void *) { return 0; }
+void * __dso_handle = nullptr;

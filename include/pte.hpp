@@ -75,6 +75,8 @@ class Pte
         ALWAYS_INLINE
         static inline void operator delete (void *ptr) { Buddy::allocator.free (reinterpret_cast<mword>(ptr)); }
 
+        void free_up (unsigned l, P *);
+
     public:
 
         Pte() : val(0) {}
@@ -105,4 +107,6 @@ class Pte
         size_t lookup (E, Paddr &, mword &);
 
         void update (E, mword, E, mword, Type = TYPE_UP);
+
+        void clear(bool all = true);
 };

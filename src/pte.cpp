@@ -100,6 +100,40 @@ void Pte<P,E,L,B,F>::update (E v, mword o, E p, mword a, Type t)
         flush (e, n * sizeof (E));
 }
 
+template <typename P, typename E, unsigned L, unsigned B, bool F>
+void Pte<P,E,L,B,F>::clear (bool all)
+{
+    if (!val)
+        return;
+
+    P * e = static_cast<P *>(Buddy::phys_to_ptr (this->addr()));
+
+    if (all)
+        e->free_up(L - 1, e);
+
+    delete e; 
+}
+
+template <typename P, typename E, unsigned L, unsigned B, bool F>
+void Pte<P,E,L,B,F>::free_up (unsigned l, P * e)
+{
+    if (!l || !val || !e || !e->val)
+        return;
+
+    for (unsigned long i = 0; i < (1 << B); i++) {
+        if (!e[i].val)
+            continue;
+
+        if (!e[i].super()) {
+            P *p = static_cast<P *>(Buddy::phys_to_ptr (e[i].addr()));
+            p->free_up(l - 1, p);
+            delete p;
+        }
+
+        e[i].val = 0;
+    }
+}
+
 template class Pte<Dpt, uint64, 4, 9, true>;
 template class Pte<Ept, uint64, 4, 9, false>;
 template class Pte<Hpt, mword, PTE_LEV, PTE_BPL, false>;
