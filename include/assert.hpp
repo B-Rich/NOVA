@@ -22,11 +22,11 @@
 
 #include "console.hpp"
 
-#ifdef DEBUG
+//#ifdef DEBUG
 #define assert(X)   do {                                                                                    \
                         if (EXPECT_FALSE (!(X)))                                                            \
                             Console::panic ("Assertion \"%s\" failed at %s:%d", #X, __FILE__, __LINE__);    \
                     } while (0)
-#else
-#define assert(X)   do { (void) sizeof (X); } while (0)
-#endif
+//#else
+//#define assert(X)   do { (void) sizeof (X); } while (0)
+//#endif
