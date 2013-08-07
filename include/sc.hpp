@@ -5,6 +5,7 @@
  * Economic rights: Technische Universitaet Dresden (Germany)
  *
  * Copyright (C) 2012 Udo Steinberg, Intel Corporation.
+ * Copyright (C) 2013 Alexander Boettcher, Genode Labs GmbH
  *
  * This file is part of the NOVA microhypervisor.
  *
@@ -75,6 +76,7 @@ class Sc : public Kobject, public Refcount
 
         Sc (Pd *, mword, Ec *);
         Sc (Pd *, mword, Ec *, unsigned, unsigned, unsigned);
+        Sc (Pd *, Ec *, unsigned, Sc *);
 
         ALWAYS_INLINE
         static inline Rq *remote (unsigned long c)
