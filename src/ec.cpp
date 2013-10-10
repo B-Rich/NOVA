@@ -115,7 +115,13 @@ Ec::~Ec()
         return;
     }
 
-    /* vCPU cleanup missing ... */
+    /* vCPU cleanup */
+    delete regs.vtlb;
+
+    if (Hip::feature() & Hip::FEAT_VMX)
+        delete regs.vmcs;
+    else if (Hip::feature() & Hip::FEAT_SVM)
+        delete regs.vmcb;
 }
 
 void Ec::handle_hazard (mword hzd, void (*func)())
