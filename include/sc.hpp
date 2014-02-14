@@ -35,12 +35,12 @@ class Sc : public Kobject, public Refcount
         unsigned const budget;
         uint64 time;
 
+        static unsigned const priorities = 128;
+
     private:
         unsigned left;
         Sc *prev, *next;
         uint64 tsc;
-
-        static unsigned const priorities = 128;
 
         static Slab_cache cache;
 
