@@ -295,6 +295,8 @@ void Pd::xfer_items (Pd *src, Crd xlt, Crd del, Xfer *s, Xfer *d, unsigned long 
 
 Pd::~Pd()
 {
+    pre_free(this);
+
     Space_mem::hpt.clear();
     Space_mem::dpt.clear();
     Space_mem::npt.clear();
